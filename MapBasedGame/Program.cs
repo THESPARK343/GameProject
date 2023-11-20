@@ -13,39 +13,114 @@ namespace MapBasedGame
         static int MapLeft;
         static int MapRight;
 
+        static bool RunGame;
+        static Random rng;
+
         static int playerPosL;
         static int playerPosR;
+        static bool PlayerMoved;
+
+        static int enemyPosL;
+        static int enemyPosR;
         static void Main(string[] args)
         {
+            RunGame = false;
             Console.CursorVisible = false;
             Console.SetCursorPosition(5, 5);
             StartUp();
-            MapDraw();
-            Console.ReadKey();
+
+            while (RunGame)
+            {
+                PlayerInput();
+                if (PlayerMoved)
+                {
+                    DrawLayers();
+                    PlayerMoved = false;
+                }
+
+            }
         }
 
         static void StartUp()
         {
+            rng = new Random();
+
             MapLeft = 25;
             MapRight = 25;
             playerPosL = 10;
-            playerPosR = -10;
+            playerPosR = 10;
+            enemyPosL = rng.Next(5, 10)*2;
+            enemyPosR = rng.Next(5, 10)*2;
             MapSetup();
+            RunGame = true;
+            DrawLayers();
+
         }
 
-        static void PlayerMovement()
+        static void DrawLayers()
         {
+            
+            Console.SetCursorPosition(0, 0);
+            MapDraw();
+            Console.SetCursorPosition(0, 0);
+            EnemySprite();
+            Console.SetCursorPosition(0, 0);
+            PlayerSprite();
+            Console.SetCursorPosition(0, 0);
+        }
+
+        static void PlayerInput()
+        {
+            ConsoleKeyInfo MoveValue = Console.ReadKey();
+
+            if (MoveValue.Key == ConsoleKey.UpArrow)
+            {
+                if (playerPosR >= 1+3)
+                {
+                    playerPosR -= 1;
+                    PlayerMoved = true;
+
+                }
+            }
+            else if (MoveValue.Key == ConsoleKey.DownArrow)
+            {
+                if (playerPosR <= 24+3)
+                {
+                    playerPosR += 1;
+                    PlayerMoved = true;
+                }
+            }
+            else if (MoveValue.Key == ConsoleKey.LeftArrow)
+            {
+                if (playerPosL >= 2)
+                {
+                    playerPosL -= 2;
+                    PlayerMoved = true;
+                }
+            }
+            else if (MoveValue.Key == ConsoleKey.RightArrow)
+            {
+                if (playerPosL <= 48)
+                {
+                    playerPosL += 2;
+                    PlayerMoved = true;
+                }
+            }
+            
+
 
         }
 
         static void PlayerSprite()
         {
             GFX.GridProcGFX(1,1,playerPosL,playerPosR,true,1);
+            
         }
 
         static void EnemySprite()
         {
-
+            GFX.GridProcGFX(5, 1, enemyPosL, enemyPosR, true, 1);
+        
         }
         static void MapSetup()
         {
@@ -61,19 +136,20 @@ namespace MapBasedGame
 
         static void MapDraw()
         {
-            for (int L = 0; L < MapLeft; L++)
+            //for (int L = 0; L < MapLeft; L++)
+            //{
+            //    for (int R = 0; R < MapRight; R++)
+            //    {
+            //        foreach (int Cell in Map)
+            //        {
+            //            GFX.GridProcGFX(Cell, 1, 0, 0, false, MapRight);
+            //        }
+            //    }
+            //}
+            Console.SetCursorPosition(0, 3);
+            foreach (int cell in Map)
             {
-                for (int R = 0; R < MapRight; R++)
-                {
-                    foreach (int Cell in Map)
-                    {
-                        GFX.GridProcGFX(Cell, 1, 0, 0, true, MapRight);
-                    }
-                }
-            }
-            foreach (int Cell in Map)
-            {
-                GFX.GridProcGFX(Cell,1,0,0,true,MapRight);
+                GFX.GridProcGFX(cell, 1, 0, 0, false, MapLeft);
             }
         }
 
