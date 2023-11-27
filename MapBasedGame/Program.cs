@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using CellularGFX;
 
@@ -15,7 +17,7 @@ namespace MapBasedGame
 
         static bool RunGame;
         static Random rng;
-
+        static bool PLmoving;
         static int playerPosL;
         static int playerPosR;
         static bool PlayerMoved;
@@ -26,21 +28,25 @@ namespace MapBasedGame
         {
             RunGame = false;
             Console.CursorVisible = false;
-            Console.SetCursorPosition(5, 5);
+            Console.SetCursorPosition(1, 1);
             StartUp();
 
             while (RunGame)
             {
-                PlayerInput();
-                if (PlayerMoved)
+                if (Timer(0,120))
                 {
-                    DrawLayers();
-                    PlayerMoved = false;
+                    PlayerInput();
+                    if (PlayerMoved)
+                    {
+                        DrawLayers();
+                        PlayerMoved = false;
+                    }
+
                 }
 
             }
         }
-
+       
         static void StartUp()
         {
             rng = new Random();
@@ -51,7 +57,7 @@ namespace MapBasedGame
             playerPosR = 10;
             enemyPosL = rng.Next(5, 10)*2;
             enemyPosR = rng.Next(5, 10)*2;
-            MapSetup();
+            
             RunGame = true;
             DrawLayers();
 
@@ -60,13 +66,13 @@ namespace MapBasedGame
         static void DrawLayers()
         {
             
-            Console.SetCursorPosition(0, 0);
+            Console.SetCursorPosition(1, 1);
             MapDraw();
-            Console.SetCursorPosition(0, 0);
+            Console.SetCursorPosition(1, 1);
             EnemySprite();
-            Console.SetCursorPosition(0, 0);
+            Console.SetCursorPosition(1, 1);
             PlayerSprite();
-            Console.SetCursorPosition(0, 0);
+            Console.SetCursorPosition(1, 1);
         }
 
         static void PlayerInput()
@@ -113,43 +119,44 @@ namespace MapBasedGame
 
         static void PlayerSprite()
         {
-            GFX.GridProcGFX(1,1,playerPosL,playerPosR,true,1);
+            GFX.GridProcGFX("1", 1, playerPosL, playerPosR, true, 1, false);
             
         }
 
         static void EnemySprite()
         {
-            GFX.GridProcGFX(5, 1, enemyPosL, enemyPosR, true, 1);
+            GFX.GridProcGFX("5", 1, enemyPosL, enemyPosR, true, 1, false);
         
         }
         static void MapSetup()
         {
-            Map = new int[MapLeft, MapRight];
-            for (int L = 0; L < MapLeft; L++)
-            {
-                for (int R = 0; R < MapRight; R++)
-                {
-                    Map[L, R] = 6;
-                }
-            }
+            
+        }
+        static void MapUnpack()
+        {
+           
+
         }
 
         static void MapDraw()
         {
-            //for (int L = 0; L < MapLeft; L++)
-            //{
-            //    for (int R = 0; R < MapRight; R++)
-            //    {
-            //        foreach (int Cell in Map)
-            //        {
-            //            GFX.GridProcGFX(Cell, 1, 0, 0, false, MapRight);
-            //        }
-            //    }
-            //}
-            Console.SetCursorPosition(0, 3);
-            foreach (int cell in Map)
+            string[,] maplegend; 
+            
+            string mapData = SaveNLoad.Load();
+
+            string[] mapRows = mapData.Split('\n');
+            int rowCount = 0;
+            foreach (string column in mapRows)
             {
-                GFX.GridProcGFX(cell, 1, 0, 0, false, MapLeft);
+                int lineCount = 0;
+                string[] cells = column.Split('~');
+              
+                foreach (string cell in cells)
+                {
+                    lineCount++;
+                    GFX.GridProcGFX(cell, 1, 0, 0, false, 1, false);
+                }
+                rowCount++;
             }
         }
 

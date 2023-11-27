@@ -36,11 +36,11 @@ namespace CellularGFX
         /// this will output a 3x3 picture of a white plus with red corners
         /// </summary>
         public static int LineCount = 0;
-        static void CellCLRGFX(int CellCLR)
+        static void CellCLRGFX(string CellCLR)
         {
 
             // Black
-            if (CellCLR == 0)
+            if (CellCLR == "0")
             {
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.Black;
@@ -49,7 +49,7 @@ namespace CellularGFX
                 Console.ForegroundColor = ConsoleColor.White;
             }
             // White
-            else if (CellCLR == 1)
+            else if (CellCLR == "1")
             {
                 Console.BackgroundColor = ConsoleColor.White;
                 Console.ForegroundColor = ConsoleColor.White;
@@ -58,7 +58,7 @@ namespace CellularGFX
                 Console.ForegroundColor = ConsoleColor.White;
             }
             // Blue
-            else if (CellCLR == 2)
+            else if (CellCLR == "2")
             {
                 Console.BackgroundColor = ConsoleColor.Blue;
                 Console.ForegroundColor = ConsoleColor.Blue;
@@ -67,7 +67,7 @@ namespace CellularGFX
                 Console.ForegroundColor = ConsoleColor.White;
             }
             // Green
-            else if (CellCLR == 3)
+            else if (CellCLR == "3")
             {
                 Console.BackgroundColor = ConsoleColor.Green;
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -76,7 +76,7 @@ namespace CellularGFX
                 Console.ForegroundColor = ConsoleColor.White;
             }
             // Yellow
-            else if (CellCLR == 4)
+            else if (CellCLR == "4")
             {
                 Console.BackgroundColor = ConsoleColor.Yellow;
                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -85,7 +85,7 @@ namespace CellularGFX
                 Console.ForegroundColor = ConsoleColor.White;
             }
             // Red
-            else if (CellCLR == 5)
+            else if (CellCLR == "5")
             {
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -94,7 +94,7 @@ namespace CellularGFX
                 Console.ForegroundColor = ConsoleColor.White;
             }
             // Grey
-            else if (CellCLR == 6)
+            else if (CellCLR == "6")
             {
                 Console.BackgroundColor = ConsoleColor.Gray;
                 Console.ForegroundColor = ConsoleColor.Gray;
@@ -103,7 +103,7 @@ namespace CellularGFX
                 Console.ForegroundColor = ConsoleColor.White;
             }
             // Dark Grey
-            else if (CellCLR == 7)
+            else if (CellCLR == "7")
             {
                 Console.BackgroundColor = ConsoleColor.DarkGray;
                 Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -111,7 +111,7 @@ namespace CellularGFX
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.White;
             }
-            else if (CellCLR == 8)
+            else if (CellCLR == "8")
             {
                 Console.BackgroundColor = ConsoleColor.DarkYellow;
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -119,7 +119,7 @@ namespace CellularGFX
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.White;
             }
-            else if (CellCLR == 9)
+            else if (CellCLR == "9")
             {
                 Console.BackgroundColor = ConsoleColor.DarkGreen;
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -133,35 +133,44 @@ namespace CellularGFX
             //    Console.Write("\n");
             //}
         }
-        public static void GridProcGFX(int CellGFX, int FMR, int PosX, int PosY, bool HoldPos, int Nline)
+        public static void GridProcGFX(string CellGFX, int FMR, int PosX, int PosY, bool HoldPos, int Nline, bool NlineTrue)
         {
             int RnTime = 0;
            // ValueGFX = new char CellA[] { };
 
             //Array.Copy(ValueGFX , );
 
-            
-            while (RnTime < FMR)
+            if (NlineTrue)
             {
-                if (HoldPos)
+                while (RnTime < FMR)
                 {
-                    Console.SetCursorPosition(PosX, PosY);
-                }
+                    if (HoldPos)
+                    {
+                        Console.SetCursorPosition(PosX, PosY);
+                    }
                 
-                 
-                if (LineCount <= (Nline - 1))
-                {
-                    LineCount = LineCount + 1;
-                    CellCLRGFX(CellGFX);
-                    RnTime = RnTime + 1;
+                    if (NlineTrue)
+                    {
 
-                }   
-                else
-                {
-                    Console.Write("\n");
-                    LineCount = 0;
+                    if (LineCount <= (Nline - 1))
+                    {
+                        LineCount = LineCount + 1;
+                        CellCLRGFX(CellGFX);
+                        RnTime = RnTime + 1;
+
+                    }   
+                    else
+                    {
+                        Console.Write("\n");
+                        LineCount = 0;
+                    }
+                    }
+
                 }
-
+            }
+            else
+            {
+                CellCLRGFX(CellGFX);
             }
         }
     }
